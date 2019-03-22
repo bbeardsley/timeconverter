@@ -25,3 +25,29 @@ Commands
   <value> -> string with timestamps in it
   -       -> pipe input with timestamps from stdin
 ```
+## format
+
+The format is specified using Golang formatting string.  See [docs](https://yourbasic.org/golang/format-parse-string-time-date-example/) for more info and some examples.
+
+## location
+
+The location is specified using the IANA time zone [database](https://www.iana.org/time-zones).
+## examples
+### command line
+```
+  timeconverter 2019-03-17T00:00:00Z
+```
+
+```
+  timeconverter -location="America/Chicago" 2019-03-17T00:00:00Z
+```
+
+```
+  timeconverter -format="ANSIC" 2019-03-17T00:00:00Z
+```
+### bash aliases
+```
+  alias lt='timeconverter'
+  alias cst='timeconverter -location="America/Chicago"'
+```
+
