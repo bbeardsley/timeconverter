@@ -35,15 +35,15 @@ The location is specified using the IANA time zone [database](https://www.iana.o
 ## examples
 ### command line
 ```
-  timeconverter 2019-03-17T00:00:00Z
+$ timeconverter 2019-03-17T00:00:00Z
 ```
 
 ```
-  timeconverter -location="America/Chicago" 2019-03-17T00:00:00Z
+$ timeconverter -location="America/Chicago" 2019-03-17T00:00:00Z
 ```
 
 ```
-  timeconverter -format="ANSIC" 2019-03-17T00:00:00Z
+$ timeconverter -format="ANSIC" 2019-03-17T00:00:00Z
 ```
 ### bash aliases
 ```
