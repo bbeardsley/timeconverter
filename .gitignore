@@ -12,3 +12,5 @@
 *.out
 
 timeconverter
+dist/timeconverter.rb
+dist/timeconverter*.zip
