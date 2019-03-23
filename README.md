@@ -34,14 +34,22 @@ The format is specified using Golang formatting string.  See [docs](https://your
 The location is specified using the IANA time zone [database](https://www.iana.org/time-zones).
 ## examples
 ### command line
+#### convert all dates in server log to local time
+```
+$ timeconverter - < server.log
+```
+
+#### convert timestamp to local time
 ```
 $ timeconverter 2019-03-17T00:00:00Z
 ```
 
+#### convert timestamp to CST/CDT
 ```
 $ timeconverter -location="America/Chicago" 2019-03-17T00:00:00Z
 ```
 
+#### convert time to local time using built-in ANSIC format
 ```
 $ timeconverter -format="ANSIC" 2019-03-17T00:00:00Z
 ```
