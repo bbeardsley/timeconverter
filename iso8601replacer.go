@@ -4,10 +4,10 @@ import (
 	"regexp"
 	"strings"
 	"time"
+	"unicode"
 )
 
 const dateTimeLayout = "2006-01-02T15:04:05"
-const nanoLayout = ".000"
 
 // Iso8601Replacer parses iso 8601 dates and formats them per format and location
 type Iso8601Replacer struct {
@@ -21,7 +21,32 @@ func getTimePortion(dateTimeString string) string {
 	return dateTimeFields[1]
 }
 
-func getNonUtcTimeLayout(timePortion string, hasNanos bool) string {
+func getNanosLength(timePortion string) int {
+	lastPeriod := strings.LastIndex(timePortion, ".")
+	if lastPeriod < 1 {
+		return 0
+	}
+	length := 0
+	for i := lastPeriod + 1; i <= len(timePortion); i++ {
+		if unicode.IsDigit(rune(timePortion[i])) {
+			length++
+		} else {
+			break
+		}
+	}
+	return length
+}
+
+func writeNanos(sb *strings.Builder, nanosLen int) {
+	if nanosLen > 0 {
+		sb.WriteString(".")
+		for i := 1; i <= nanosLen; i++ {
+			sb.WriteString("0")
+		}
+	}
+}
+
+func getNonUtcTimeLayout(timePortion string, nanosLen int) string {
 	hasZ := strings.Contains(timePortion, "Z")
 	offsetIndex := strings.LastIndexFunc(timePortion, func(c rune) bool {
 		return c == '+' || c == '-'
@@ -30,9 +55,9 @@ func getNonUtcTimeLayout(timePortion string, hasNanos bool) string {
 
 	var sb strings.Builder
 	sb.WriteString(dateTimeLayout)
-	if hasNanos {
-		sb.WriteString(nanoLayout)
-	}
+
+	writeNanos(&sb, nanosLen)
+
 	if hasZ {
 		sb.WriteString("Z")
 	}
@@ -51,18 +76,19 @@ func getNonUtcTimeLayout(timePortion string, hasNanos bool) string {
 
 func getTimeLayout(dateString string) string {
 	timePortion := getTimePortion(dateString)
-	hasNanos := strings.Contains(timePortion, ".")
+	nanosLen := getNanosLength(timePortion)
 
 	if strings.Contains(timePortion, "+") || strings.Contains(timePortion, "-") {
-		return getNonUtcTimeLayout(timePortion, hasNanos)
+		return getNonUtcTimeLayout(timePortion, nanosLen)
 	}
 
 	var sb strings.Builder
 	sb.WriteString(dateTimeLayout)
-	if hasNanos {
-		sb.WriteString(nanoLayout)
-	}
+
+	writeNanos(&sb, nanosLen)
+
 	sb.WriteString("Z")
+
 	return sb.String()
 }
 

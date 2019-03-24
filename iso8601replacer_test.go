@@ -19,9 +19,9 @@ func (definition testDefinition) execute(t *testing.T) {
 	result := replacer.ReplaceDates(definition.Input, format, location)
 	if result != definition.Expected {
 		t.Error(
-			"For", definition.Input,
-			"expected", definition.Expected,
-			"got", result,
+			"For", "\""+definition.Input+"\"",
+			"expected", "\""+definition.Expected+"\"",
+			"got", "\""+result+"\"",
 		)
 	}
 }
@@ -30,6 +30,8 @@ func (definition testDefinition) execute(t *testing.T) {
 func TestUtcDates(t *testing.T) {
 	testDefinitions := []testDefinition{
 		{"2019-03-17T01:02:03Z", "Sat 2019 Mar 16 07:02pm MDT"},
+		{"2019-03-17T01:02:03.4Z", "Sat 2019 Mar 16 07:02pm MDT"},
+		{"2019-03-17T01:02:03.04Z", "Sat 2019 Mar 16 07:02pm MDT"},
 		{"2019-03-17T01:02:03.004Z", "Sat 2019 Mar 16 07:02pm MDT"},
 	}
 	for _, definition := range testDefinitions {
@@ -43,6 +45,14 @@ func TestUtcPlusOffset(t *testing.T) {
 		{"2019-03-17T01:02:03Z+05:30", "Sat 2019 Mar 16 01:32pm MDT"},
 		{"2019-03-17T01:02:03Z+0530", "Sat 2019 Mar 16 01:32pm MDT"},
 
+		{"2019-03-17T01:02:03.4Z+05", "Sat 2019 Mar 16 02:02pm MDT"},
+		{"2019-03-17T01:02:03.4Z+05:30", "Sat 2019 Mar 16 01:32pm MDT"},
+		{"2019-03-17T01:02:03.4Z+0530", "Sat 2019 Mar 16 01:32pm MDT"},
+
+		{"2019-03-17T01:02:03.04Z+05", "Sat 2019 Mar 16 02:02pm MDT"},
+		{"2019-03-17T01:02:03.04Z+05:30", "Sat 2019 Mar 16 01:32pm MDT"},
+		{"2019-03-17T01:02:03.04Z+0530", "Sat 2019 Mar 16 01:32pm MDT"},
+
 		{"2019-03-17T01:02:03.004Z+05", "Sat 2019 Mar 16 02:02pm MDT"},
 		{"2019-03-17T01:02:03.004Z+05:30", "Sat 2019 Mar 16 01:32pm MDT"},
 		{"2019-03-17T01:02:03.004Z+0530", "Sat 2019 Mar 16 01:32pm MDT"},
@@ -50,6 +60,14 @@ func TestUtcPlusOffset(t *testing.T) {
 		{"2019-03-17T01:02:03+05", "Sat 2019 Mar 16 02:02pm MDT"},
 		{"2019-03-17T01:02:03+0530", "Sat 2019 Mar 16 01:32pm MDT"},
 		{"2019-03-17T01:02:03+05:30", "Sat 2019 Mar 16 01:32pm MDT"},
+
+		{"2019-03-17T01:02:03.4+05", "Sat 2019 Mar 16 02:02pm MDT"},
+		{"2019-03-17T01:02:03.4+0530", "Sat 2019 Mar 16 01:32pm MDT"},
+		{"2019-03-17T01:02:03.4+05:30", "Sat 2019 Mar 16 01:32pm MDT"},
+
+		{"2019-03-17T01:02:03.04+05", "Sat 2019 Mar 16 02:02pm MDT"},
+		{"2019-03-17T01:02:03.04+0530", "Sat 2019 Mar 16 01:32pm MDT"},
+		{"2019-03-17T01:02:03.04+05:30", "Sat 2019 Mar 16 01:32pm MDT"},
 
 		{"2019-03-17T01:02:03.004+05", "Sat 2019 Mar 16 02:02pm MDT"},
 		{"2019-03-17T01:02:03.004+0530", "Sat 2019 Mar 16 01:32pm MDT"},
@@ -66,6 +84,14 @@ func TestUtcMinusOffset(t *testing.T) {
 		{"2019-03-17T01:02:03Z-05:30", "Sun 2019 Mar 17 12:32am MDT"},
 		{"2019-03-17T01:02:03Z-0530", "Sun 2019 Mar 17 12:32am MDT"},
 
+		{"2019-03-17T01:02:03.4Z-05", "Sun 2019 Mar 17 12:02am MDT"},
+		{"2019-03-17T01:02:03.4Z-05:30", "Sun 2019 Mar 17 12:32am MDT"},
+		{"2019-03-17T01:02:03.4Z-0530", "Sun 2019 Mar 17 12:32am MDT"},
+
+		{"2019-03-17T01:02:03.04Z-05", "Sun 2019 Mar 17 12:02am MDT"},
+		{"2019-03-17T01:02:03.04Z-05:30", "Sun 2019 Mar 17 12:32am MDT"},
+		{"2019-03-17T01:02:03.04Z-0530", "Sun 2019 Mar 17 12:32am MDT"},
+
 		{"2019-03-17T01:02:03.004Z-05", "Sun 2019 Mar 17 12:02am MDT"},
 		{"2019-03-17T01:02:03.004Z-05:30", "Sun 2019 Mar 17 12:32am MDT"},
 		{"2019-03-17T01:02:03.004Z-0530", "Sun 2019 Mar 17 12:32am MDT"},
@@ -73,6 +99,14 @@ func TestUtcMinusOffset(t *testing.T) {
 		{"2019-03-17T01:02:03-05", "Sun 2019 Mar 17 12:02am MDT"},
 		{"2019-03-17T01:02:03-05:30", "Sun 2019 Mar 17 12:32am MDT"},
 		{"2019-03-17T01:02:03-0530", "Sun 2019 Mar 17 12:32am MDT"},
+
+		{"2019-03-17T01:02:03.4-05", "Sun 2019 Mar 17 12:02am MDT"},
+		{"2019-03-17T01:02:03.4-05:30", "Sun 2019 Mar 17 12:32am MDT"},
+		{"2019-03-17T01:02:03.4-0530", "Sun 2019 Mar 17 12:32am MDT"},
+
+		{"2019-03-17T01:02:03.04-05", "Sun 2019 Mar 17 12:02am MDT"},
+		{"2019-03-17T01:02:03.04-05:30", "Sun 2019 Mar 17 12:32am MDT"},
+		{"2019-03-17T01:02:03.04-0530", "Sun 2019 Mar 17 12:32am MDT"},
 
 		{"2019-03-17T01:02:03.004-05", "Sun 2019 Mar 17 12:02am MDT"},
 		{"2019-03-17T01:02:03.004-05:30", "Sun 2019 Mar 17 12:32am MDT"},
