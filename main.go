@@ -12,13 +12,59 @@ import (
 
 const version = "0.1.0"
 
-func getTimeLayout(dateString string) string {
-	switch {
-	case strings.Contains(dateString, "."):
-		return "2006-01-02T15:04:05.000Z"
-	default:
-		return "2006-01-02T15:04:05Z"
+const dateTimeLayout = "2006-01-02T15:04:05"
+const nanoLayout = ".000"
+
+func getTimePortion(dateTimeString string) string {
+	dateTimeFields := strings.FieldsFunc(dateTimeString, func(c rune) bool {
+		return c == 'T'
+	})
+	return dateTimeFields[1]
+}
+
+func getNonUtcTimeLayout(timePortion string, hasNanos bool) string {
+	hasZ := strings.Contains(timePortion, "Z")
+	offsetIndex := strings.LastIndexFunc(timePortion, func(c rune) bool {
+		return c == '+' || c == '-'
+	})
+	timezoneLength := len(timePortion) - offsetIndex - 1
+
+	var sb strings.Builder
+	sb.WriteString(dateTimeLayout)
+	if hasNanos {
+		sb.WriteString(nanoLayout)
 	}
+	if hasZ {
+		sb.WriteString("Z")
+	}
+	switch timezoneLength {
+	case 2:
+		sb.WriteString("-07")
+	case 4:
+		sb.WriteString("-0700")
+	case 5:
+		sb.WriteString("-07:00")
+	default:
+		panic("Unsupported non UTC time layout " + timePortion)
+	}
+	return sb.String()
+}
+
+func getTimeLayout(dateString string) string {
+	timePortion := getTimePortion(dateString)
+	hasNanos := strings.Contains(timePortion, ".")
+
+	if strings.Contains(timePortion, "+") || strings.Contains(timePortion, "-") {
+		return getNonUtcTimeLayout(timePortion, hasNanos)
+	}
+
+	var sb strings.Builder
+	sb.WriteString(dateTimeLayout)
+	if hasNanos {
+		sb.WriteString(nanoLayout)
+	}
+	sb.WriteString("Z")
+	return sb.String()
 }
 
 func getLocation(locationString string) *time.Location {
@@ -102,7 +148,7 @@ func main() {
 		os.Exit(0)
 	}
 
-	re := regexp.MustCompile(`\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,3})?Z`)
+	re := regexp.MustCompile(`\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,3})?(Z|Z?(\+|\-)(\d{4}|\d{2}:\d{2}|\d{2})?)`)
 
 	arg := flag.Arg(0)
 	switch arg {
