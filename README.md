@@ -17,6 +17,8 @@ Options
         format to use (default "Mon 2006 Jan 02 03:04pm MST")
   -location string
         tzdata location to convert to (default "Local")
+  -type string
+        what type of timestamps in the input (options "iso8601", "unix") (default "iso8601")
   -version
         print version number and exit
 Commands
