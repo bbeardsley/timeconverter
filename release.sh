@@ -2,7 +2,7 @@
 
 set -e
 
-version="0.1.0"
+version="0.2.0"
 package="timeconverter"
 bin="timeconverter"
 repo="https://github.com/bbeardsley/timeconverter"
