@@ -5,14 +5,14 @@ import (
 	"time"
 )
 
-type testDefinition struct {
+type iso8601TestDefinition struct {
 	Input    string
 	Expected string
 }
 
 const format = "Mon 2006 Jan 02 03:04pm MST"
 
-func (definition testDefinition) execute(t *testing.T) {
+func (definition iso8601TestDefinition) execute(t *testing.T) {
 	location, _ := time.LoadLocation("America/Denver")
 	replacer := NewIso8601Replacer()
 
@@ -28,7 +28,7 @@ func (definition testDefinition) execute(t *testing.T) {
 
 // TestUtcDates should work
 func TestUtcDates(t *testing.T) {
-	testDefinitions := []testDefinition{
+	testDefinitions := []iso8601TestDefinition{
 		{"2019-03-17T01:02:03Z", "Sat 2019 Mar 16 07:02pm MDT"},
 		{"2019-03-17T01:02:03.4Z", "Sat 2019 Mar 16 07:02pm MDT"},
 		{"2019-03-17T01:02:03.04Z", "Sat 2019 Mar 16 07:02pm MDT"},
@@ -40,7 +40,7 @@ func TestUtcDates(t *testing.T) {
 }
 
 func TestUtcPlusOffset(t *testing.T) {
-	testDefinitions := []testDefinition{
+	testDefinitions := []iso8601TestDefinition{
 		{"2019-03-17T01:02:03Z+05", "Sat 2019 Mar 16 02:02pm MDT"},
 		{"2019-03-17T01:02:03Z+05:30", "Sat 2019 Mar 16 01:32pm MDT"},
 		{"2019-03-17T01:02:03Z+0530", "Sat 2019 Mar 16 01:32pm MDT"},
@@ -79,7 +79,7 @@ func TestUtcPlusOffset(t *testing.T) {
 }
 
 func TestUtcMinusOffset(t *testing.T) {
-	testDefinitions := []testDefinition{
+	testDefinitions := []iso8601TestDefinition{
 		{"2019-03-17T01:02:03Z-05", "Sun 2019 Mar 17 12:02am MDT"},
 		{"2019-03-17T01:02:03Z-05:30", "Sun 2019 Mar 17 12:32am MDT"},
 		{"2019-03-17T01:02:03Z-0530", "Sun 2019 Mar 17 12:32am MDT"},
@@ -118,7 +118,7 @@ func TestUtcMinusOffset(t *testing.T) {
 }
 
 func TestMultipleDates(t *testing.T) {
-	testDefinitions := []testDefinition{
+	testDefinitions := []iso8601TestDefinition{
 		{"Date 1: 2019-03-17T01:02:03Z-05 and Date 2: 2019-03-17T01:02:03Z-05.", "Date 1: Sun 2019 Mar 17 12:02am MDT and Date 2: Sun 2019 Mar 17 12:02am MDT."},
 	}
 	for _, definition := range testDefinitions {
@@ -126,7 +126,7 @@ func TestMultipleDates(t *testing.T) {
 	}
 }
 func TestNonRecognized(t *testing.T) {
-	testDefinitions := []testDefinition{
+	testDefinitions := []iso8601TestDefinition{
 		{"This is a test string with no valid dates", "This is a test string with no valid dates"},
 		{"This is a test string with an invalid date 2019-03-17T01:02:03.", "This is a test string with an invalid date 2019-03-17T01:02:03."},
 	}

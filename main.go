@@ -73,6 +73,7 @@ func main() {
 	locationPtr := flag.String("location", "Local", "tzdata location to convert to")
 	formatPtr := flag.String("format", "Mon 2006 Jan 02 03:04pm MST", "format to use")
 	versionPtr := flag.Bool("version", false, "print version number and exit")
+	typePtr := flag.String("type", "iso8601", "what type of timestamps in the input (options: iso8601, unix)")
 	flag.Parse()
 
 	if *versionPtr {
@@ -93,11 +94,19 @@ func main() {
 		loc := getLocation(*locationPtr)
 		format := getFormat(*formatPtr)
 
-		replacer := NewIso8601Replacer()
-
 		scanner := bufio.NewScanner(os.Stdin)
-		for scanner.Scan() {
-			fmt.Println(replacer.ReplaceDates(scanner.Text(), format, loc))
+
+		switch *typePtr {
+		case "unix":
+			replacer := NewUnixTimestampReplacer()
+			for scanner.Scan() {
+				fmt.Println(replacer.ReplaceDates(scanner.Text(), format, loc))
+			}
+		default:
+			replacer := NewIso8601Replacer()
+			for scanner.Scan() {
+				fmt.Println(replacer.ReplaceDates(scanner.Text(), format, loc))
+			}
 		}
 
 		if err := scanner.Err(); err != nil {
@@ -107,6 +116,11 @@ func main() {
 		loc := getLocation(*locationPtr)
 		format := getFormat(*formatPtr)
 
-		fmt.Println(NewIso8601Replacer().ReplaceDates(arg, format, loc))
+		switch *typePtr {
+		case "unix":
+			fmt.Println(NewUnixTimestampReplacer().ReplaceDates(arg, format, loc))
+		default:
+			fmt.Println(NewIso8601Replacer().ReplaceDates(arg, format, loc))
+		}
 	}
 }
