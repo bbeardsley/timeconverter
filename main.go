@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-const version = "0.2.0"
+const version = "0.3.0-dev"
 
 func printUsage() {
 	fmt.Fprintln(os.Stderr, "Usage")
@@ -83,7 +83,7 @@ func main() {
 
 	arg := flag.Arg(0)
 	switch arg {
-	case "", "-h", "--h", "/h", "/?", "help", "-help", "--help", "/help":
+	case "", "h", "-h", "--h", "/h", "/?", "help", "-help", "--help", "/help":
 		printUsage()
 		os.Exit(1)
 	case "version", "-version", "--version", "/version":
