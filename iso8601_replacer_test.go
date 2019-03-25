@@ -33,6 +33,16 @@ func TestUtcDates(t *testing.T) {
 		{"2019-03-17T01:02:03.4Z", "Sat 2019 Mar 16 07:02pm MDT"},
 		{"2019-03-17T01:02:03.04Z", "Sat 2019 Mar 16 07:02pm MDT"},
 		{"2019-03-17T01:02:03.004Z", "Sat 2019 Mar 16 07:02pm MDT"},
+
+		{"2019-03-17 01:02:03Z", "Sat 2019 Mar 16 07:02pm MDT"},
+		{"2019-03-17 01:02:03.4Z", "Sat 2019 Mar 16 07:02pm MDT"},
+		{"2019-03-17 01:02:03.04Z", "Sat 2019 Mar 16 07:02pm MDT"},
+		{"2019-03-17 01:02:03.004Z", "Sat 2019 Mar 16 07:02pm MDT"},
+
+		{"2019-03-17 01:02:03", "Sat 2019 Mar 16 07:02pm MDT"},
+		{"2019-03-17 01:02:03.4", "Sat 2019 Mar 16 07:02pm MDT"},
+		{"2019-03-17 01:02:03.04", "Sat 2019 Mar 16 07:02pm MDT"},
+		{"2019-03-17 01:02:03.004", "Sat 2019 Mar 16 07:02pm MDT"},
 	}
 	for _, definition := range testDefinitions {
 		definition.execute(t)
@@ -128,7 +138,7 @@ func TestMultipleDates(t *testing.T) {
 func TestNonRecognized(t *testing.T) {
 	testDefinitions := []iso8601TestDefinition{
 		{"This is a test string with no valid dates", "This is a test string with no valid dates"},
-		{"This is a test string with an invalid date 2019-03-17T01:02:03.", "This is a test string with an invalid date 2019-03-17T01:02:03."},
+		{"This is a test string with an invalid date 2019-03-17 01:02.", "This is a test string with an invalid date 2019-03-17 01:02."},
 	}
 	for _, definition := range testDefinitions {
 		definition.execute(t)

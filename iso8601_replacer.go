@@ -7,7 +7,8 @@ import (
 	"unicode"
 )
 
-const dateTimeLayout = "2006-01-02T15:04:05"
+const dateLayout = "2006-01-02"
+const timeLayout = "15:04:05"
 
 // Iso8601Replacer parses iso 8601 dates and formats them per format and location
 type Iso8601Replacer struct {
@@ -16,7 +17,7 @@ type Iso8601Replacer struct {
 
 func getTimePortion(dateTimeString string) string {
 	dateTimeFields := strings.FieldsFunc(dateTimeString, func(c rune) bool {
-		return c == 'T'
+		return c == 'T' || c == ' '
 	})
 	return dateTimeFields[1]
 }
@@ -27,7 +28,7 @@ func getNanosLength(timePortion string) int {
 		return 0
 	}
 	length := 0
-	for i := lastPeriod + 1; i <= len(timePortion); i++ {
+	for i := lastPeriod + 1; i < len(timePortion); i++ {
 		if unicode.IsDigit(rune(timePortion[i])) {
 			length++
 		} else {
@@ -46,7 +47,7 @@ func writeNanos(sb *strings.Builder, nanosLen int) {
 	}
 }
 
-func getNonUtcTimeLayout(timePortion string, nanosLen int) string {
+func getNonUtcTimeLayout(timePortion string, hasT bool, nanosLen int) string {
 	hasZ := strings.Contains(timePortion, "Z")
 	offsetIndex := strings.LastIndexFunc(timePortion, func(c rune) bool {
 		return c == '+' || c == '-'
@@ -54,7 +55,13 @@ func getNonUtcTimeLayout(timePortion string, nanosLen int) string {
 	timezoneLength := len(timePortion) - offsetIndex - 1
 
 	var sb strings.Builder
-	sb.WriteString(dateTimeLayout)
+	sb.WriteString(dateLayout)
+	if hasT {
+		sb.WriteString("T")
+	} else {
+		sb.WriteString(" ")
+	}
+	sb.WriteString(timeLayout)
 
 	writeNanos(&sb, nanosLen)
 
@@ -75,19 +82,29 @@ func getNonUtcTimeLayout(timePortion string, nanosLen int) string {
 }
 
 func getTimeLayout(dateString string) string {
+	hasT := strings.Contains(dateString, "T")
+	hasZ := strings.Contains(dateString, "Z")
 	timePortion := getTimePortion(dateString)
 	nanosLen := getNanosLength(timePortion)
 
 	if strings.Contains(timePortion, "+") || strings.Contains(timePortion, "-") {
-		return getNonUtcTimeLayout(timePortion, nanosLen)
+		return getNonUtcTimeLayout(timePortion, hasT, nanosLen)
 	}
 
 	var sb strings.Builder
-	sb.WriteString(dateTimeLayout)
+	sb.WriteString(dateLayout)
+	if hasT {
+		sb.WriteString("T")
+	} else {
+		sb.WriteString(" ")
+	}
+	sb.WriteString(timeLayout)
 
 	writeNanos(&sb, nanosLen)
 
-	sb.WriteString("Z")
+	if hasZ {
+		sb.WriteString("Z")
+	}
 
 	return sb.String()
 }
@@ -106,5 +123,5 @@ func (replacer Iso8601Replacer) ReplaceDates(input string, format string, locati
 
 // NewIso8601Replacer creates a new replacer with the regex initialized
 func NewIso8601Replacer() *Iso8601Replacer {
-	return &Iso8601Replacer{regexp.MustCompile(`\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,3})?(Z?(\+|\-)(\d{4}|\d{2}:\d{2}|\d{2})|Z)`)}
+	return &Iso8601Replacer{regexp.MustCompile(`\d{4}-\d{2}-\d{2}(T| )\d{2}:\d{2}:\d{2}(\.\d{1,3})?Z?((\+|\-)(\d{4}|\d{2}:\d{2}|\d{2}))?`)}
 }
