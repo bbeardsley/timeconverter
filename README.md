@@ -55,9 +55,15 @@ $ timeconverter -location="America/Chicago" 2019-03-17T00:00:00Z
 ```
 $ timeconverter -format="ANSIC" 2019-03-17T00:00:00Z
 ```
+#### convert unix timestamp to local time
+```
+$ timeconverter -type=unix 1553534903
+```
+
 ### bash aliases
 ```
   alias lt='timeconverter'
   alias cst='timeconverter -location="America/Chicago"'
+  alias uts='timeconverter -type=unix'
 ```
 
