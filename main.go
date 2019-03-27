@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-const version = "0.3.0-dev"
+const version = "0.3.0"
 
 func printUsage() {
 	fmt.Fprintln(os.Stderr, "Usage")
