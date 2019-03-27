@@ -1,5 +1,6 @@
 # timeconverter
 [![Go Report Card](https://goreportcard.com/badge/github.com/bbeardsley/timeconverter)](https://goreportcard.com/report/github.com/bbeardsley/timeconverter)
+[![GoDoc](https://godoc.org/github.com/bbeardsley/timeconverter?status.svg)](https://godoc.org/github.com/bbeardsley/timeconverter)
 
 convert timestamps to local time or specified timezone
 
