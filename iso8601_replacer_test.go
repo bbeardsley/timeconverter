@@ -185,6 +185,9 @@ func TestUtcMinusOffset(t *testing.T) {
 		{"2019-03-17 01:02:03.004-05", "Sun 2019 Mar 17 12:02am MDT"},
 		{"2019-03-17 01:02:03.004-05:30", "Sun 2019 Mar 17 12:32am MDT"},
 		{"2019-03-17 01:02:03.004-0530", "Sun 2019 Mar 17 12:32am MDT"},
+
+		{"2019-03-29T15:59:57.368427-06:00", "Fri 2019 Mar 29 03:59pm MDT"},
+		{"2019-07-16T18:00:00.000000001-06:00", "Tue 2019 Jul 16 06:00pm MDT"},
 	}
 	for _, definition := range testDefinitions {
 		definition.execute(t)
