@@ -5,10 +5,32 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"sort"
+	"strings"
 	"time"
 )
 
-const version = "0.3.0"
+const version = "0.3.1"
+const unixSeconds = "UnixSeconds"
+
+var builtInFormats = map[string]string{
+	"ANSIC":       time.ANSIC,
+	"UnixDate":    time.UnixDate,
+	"RubyDate":    time.RubyDate,
+	"RFC822":      time.RFC822,
+	"RFC822Z":     time.RFC822Z,
+	"RFC850":      time.RFC850,
+	"RFC1123":     time.RFC1123,
+	"RFC1123Z":    time.RFC1123Z,
+	"RFC3339":     time.RFC3339,
+	"RFC3339Nano": time.RFC3339Nano,
+	"Kitchen":     time.Kitchen,
+	"Stamp":       time.Stamp,
+	"StampMilli":  time.StampMilli,
+	"StampMicro":  time.StampMicro,
+	"StampNano":   time.StampNano,
+	unixSeconds:   unixSeconds,
+}
 
 func printUsage() {
 	fmt.Fprintln(os.Stderr, "Usage")
@@ -24,41 +46,20 @@ func printUsage() {
 	fmt.Fprintln(os.Stderr, "  -       -> pipe input with timestamps from stdin")
 }
 
-func getFormat(formatString string) string {
-	switch formatString {
-	case "ANSIC":
-		return time.ANSIC
-	case "UnixDate":
-		return time.UnixDate
-	case "RubyDate":
-		return time.RubyDate
-	case "RFC822":
-		return time.RFC822
-	case "RFC822Z":
-		return time.RFC822Z
-	case "RFC850":
-		return time.RFC850
-	case "RFC1123":
-		return time.RFC1123
-	case "RFC1123Z":
-		return time.RFC1123Z
-	case "RFC3339":
-		return time.RFC3339
-	case "RFC3339Nano":
-		return time.RFC3339Nano
-	case "Kitchen":
-		return time.Kitchen
-	case "Stamp":
-		return time.Stamp
-	case "StampMilli":
-		return time.StampMilli
-	case "StampMicro":
-		return time.StampMicro
-	case "StampNano":
-		return time.StampNano
-	default:
-		return formatString
+func getBuiltInFormatKeys() []string {
+	keys := make([]string, 0)
+	for key := range builtInFormats {
+		keys = append(keys, key)
 	}
+	return keys
+}
+
+func getFormat(formatString string) string {
+	builtInFormat, ok := builtInFormats[formatString]
+	if ok {
+		return builtInFormat
+	}
+	return formatString
 }
 
 func getLocation(locationString string) *time.Location {
@@ -70,8 +71,10 @@ func getLocation(locationString string) *time.Location {
 }
 
 func main() {
+	builtinFormatKeys := getBuiltInFormatKeys()
+	sort.Strings(builtinFormatKeys)
 	locationPtr := flag.String("location", "Local", "tzdata location to convert to")
-	formatPtr := flag.String("format", "Mon 2006 Jan 02 03:04pm MST", "format to use")
+	formatPtr := flag.String("format", "Mon 2006 Jan 02 03:04pm MST", "format to use (options \""+strings.Join(builtinFormatKeys, "\", \"")+"\"")
 	versionPtr := flag.Bool("version", false, "print version number and exit")
 	typePtr := flag.String("type", "iso8601", "what type of timestamps in the input (options \"iso8601\", \"unix\")")
 	flag.Parse()

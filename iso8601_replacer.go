@@ -2,6 +2,7 @@ package main
 
 import (
 	"regexp"
+	"strconv"
 	"strings"
 	"time"
 	"unicode"
@@ -116,6 +117,9 @@ func (replacer Iso8601Replacer) ReplaceDates(input string, format string, locati
 		t, err := time.Parse(layout, dateString)
 		if err != nil {
 			panic(err.Error())
+		}
+		if format == unixSeconds {
+			return strconv.FormatInt(t.Unix(), 10)
 		}
 		return t.In(location).Format(format)
 	})
