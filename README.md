@@ -18,7 +18,7 @@ timeconverter [options] <command>
 
 Options
   -format string
-        format to use (default "Mon 2006 Jan 02 03:04pm MST")
+        format to use (options "ANSIC", "Kitchen", "RFC1123", "RFC1123Z", "RFC3339", "RFC3339Nano", "RFC822", "RFC822Z", "RFC850", "RubyDate", "Stamp", "StampMicro", "StampMilli", "StampNano", "UnixDate", "UnixSeconds") (default "Mon 2006 Jan 02 03:04pm MST")
   -location string
         tzdata location to convert to (default "Local")
   -type string
@@ -40,6 +40,10 @@ The format is specified using Golang formatting string.  See [docs](https://your
 The location is specified using the IANA time zone [database](https://www.iana.org/time-zones).
 ## examples
 ### command line
+#### convert all dates in kubernetes pod logs
+```
+$ kubectl logs my-pod | timeconverter -
+```
 #### convert all dates in server log to local time
 ```
 $ timeconverter - < server.log
