@@ -127,5 +127,5 @@ func (replacer Iso8601Replacer) ReplaceDates(input string, format string, locati
 
 // NewIso8601Replacer creates a new replacer with the regex initialized
 func NewIso8601Replacer() *Iso8601Replacer {
-	return &Iso8601Replacer{regexp.MustCompile(`\d{4}-\d{2}-\d{2}(T| )\d{2}:\d{2}:\d{2}(\.\d{1,3})?Z?((\+|\-)(\d{4}|\d{2}:\d{2}|\d{2}))?`)}
+	return &Iso8601Replacer{regexp.MustCompile(`\d{4}-\d{2}-\d{2}(T| )\d{2}:\d{2}:\d{2}(\.\d{1,})?Z?((\+|\-)(\d{4}|\d{2}:\d{2}|\d{2}))?`)}
 }
