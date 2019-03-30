@@ -29,6 +29,9 @@ func (definition iso8601TestDefinition) execute(t *testing.T) {
 // TestUtcDates should work
 func TestUtcDates(t *testing.T) {
 	testDefinitions := []iso8601TestDefinition{
+		{"2019-03-17T01:02", "Sat 2019 Mar 16 07:02pm MDT"},
+		{"2019-03-17T01:02Z", "Sat 2019 Mar 16 07:02pm MDT"},
+
 		{"2019-03-17T01:02:03Z", "Sat 2019 Mar 16 07:02pm MDT"},
 		{"2019-03-17T01:02:03.4Z", "Sat 2019 Mar 16 07:02pm MDT"},
 		{"2019-03-17T01:02:03.04Z", "Sat 2019 Mar 16 07:02pm MDT"},
@@ -205,7 +208,7 @@ func TestMultipleDates(t *testing.T) {
 func TestNonRecognized(t *testing.T) {
 	testDefinitions := []iso8601TestDefinition{
 		{"This is a test string with no valid dates", "This is a test string with no valid dates"},
-		{"This is a test string with an invalid date 2019-03-17 01:02.", "This is a test string with an invalid date 2019-03-17 01:02."},
+		{"This is a test string with an invalid date 2019-03-17 01.", "This is a test string with an invalid date 2019-03-17 01."},
 	}
 	for _, definition := range testDefinitions {
 		definition.execute(t)

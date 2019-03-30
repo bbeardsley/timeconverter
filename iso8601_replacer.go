@@ -9,7 +9,8 @@ import (
 )
 
 const dateLayout = "2006-01-02"
-const timeLayout = "15:04:05"
+const hoursMinutesLayout = "15:04"
+const secondsLayout = "05"
 
 // Iso8601Replacer parses iso 8601 dates and formats them per format and location
 type Iso8601Replacer struct {
@@ -62,7 +63,13 @@ func getNonUtcTimeLayout(timePortion string, hasT bool, nanosLen int) string {
 	} else {
 		sb.WriteString(" ")
 	}
-	sb.WriteString(timeLayout)
+
+	sb.WriteString(hoursMinutesLayout)
+	hasSeconds := strings.Count(timePortion, ":") >= 2
+	if hasSeconds {
+		sb.WriteString(":")
+		sb.WriteString(secondsLayout)
+	}
 
 	writeNanos(&sb, nanosLen)
 
@@ -99,7 +106,13 @@ func getTimeLayout(dateString string) string {
 	} else {
 		sb.WriteString(" ")
 	}
-	sb.WriteString(timeLayout)
+
+	sb.WriteString(hoursMinutesLayout)
+	hasSeconds := strings.Count(timePortion, ":") >= 2
+	if hasSeconds {
+		sb.WriteString(":")
+		sb.WriteString(secondsLayout)
+	}
 
 	writeNanos(&sb, nanosLen)
 
@@ -127,5 +140,5 @@ func (replacer Iso8601Replacer) ReplaceDates(input string, format string, locati
 
 // NewIso8601Replacer creates a new replacer with the regex initialized
 func NewIso8601Replacer() *Iso8601Replacer {
-	return &Iso8601Replacer{regexp.MustCompile(`\d{4}-\d{2}-\d{2}(T| )\d{2}:\d{2}:\d{2}(\.\d{1,})?Z?((\+|\-)(\d{4}|\d{2}:\d{2}|\d{2}))?`)}
+	return &Iso8601Replacer{regexp.MustCompile(`\d{4}-\d{2}-\d{2}(T| )\d{2}:\d{2}(:\d{2}(\.\d{1,})?Z?((\+|\-)(\d{4}|\d{2}:\d{2}|\d{2}))?|Z)?`)}
 }
