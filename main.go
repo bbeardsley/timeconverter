@@ -42,6 +42,7 @@ func printUsage() {
 	fmt.Fprintln(os.Stderr, "Commands")
 	fmt.Fprintln(os.Stderr, "  help    -> show this help")
 	fmt.Fprintln(os.Stderr, "  version -> print version number and exit")
+	fmt.Fprintln(os.Stderr, "  now     -> print current timestamp for location and format")
 	fmt.Fprintln(os.Stderr, "  <value> -> string with timestamps in it")
 	fmt.Fprintln(os.Stderr, "  -       -> pipe input with timestamps from stdin")
 }
@@ -119,8 +120,10 @@ func main() {
 		loc := getLocation(*locationPtr)
 		format := getFormat(*formatPtr)
 
-		switch *typePtr {
-		case "unix":
+		switch {
+		case arg == "now":
+			fmt.Println(time.Now().In(loc).Format(format))
+		case *typePtr == "unix":
 			fmt.Println(NewUnixTimestampReplacer().ReplaceDates(arg, format, loc))
 		default:
 			fmt.Println(NewIso8601Replacer().ReplaceDates(arg, format, loc))
