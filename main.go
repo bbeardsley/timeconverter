@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-const version = "0.3.2"
+const version = "0.3.3"
 const unixSeconds = "UnixSeconds"
 
 var builtInFormats = map[string]string{

@@ -28,6 +28,7 @@ Options
 Commands
   help    -> show this help
   version -> print version number and exit
+  now     -> print current timestamp for location and format
   <value> -> string with timestamps in it
   -       -> pipe input with timestamps from stdin
 ```
