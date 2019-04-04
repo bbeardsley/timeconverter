@@ -6,11 +6,12 @@ import (
 	"fmt"
 	"os"
 	"sort"
+	"strconv"
 	"strings"
 	"time"
 )
 
-const version = "0.3.3"
+const version = "0.3.4"
 const unixSeconds = "UnixSeconds"
 
 var builtInFormats = map[string]string{
@@ -122,7 +123,11 @@ func main() {
 
 		switch {
 		case arg == "now":
-			fmt.Println(time.Now().In(loc).Format(format))
+			if format == "UnixSeconds" {
+				fmt.Println(strconv.FormatInt(time.Now().Unix(), 10))
+			} else {
+				fmt.Println(time.Now().In(loc).Format(format))
+			}
 		case *typePtr == "unix":
 			fmt.Println(NewUnixTimestampReplacer().ReplaceDates(arg, format, loc))
 		default:
