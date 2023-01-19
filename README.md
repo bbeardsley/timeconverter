@@ -8,10 +8,6 @@ convert timestamps to local time or specified timezone
 ## install
 Direct downloads are available through the [releases page](https://github.com/bbeardsley/timeconverter/releases/latest).
 
-If you have Go installed on your computer just run `go get`.
-
-    go get github.com/bbeardsley/timeconverter
-
 ## usage
 ```
 timeconverter [options] <command>
