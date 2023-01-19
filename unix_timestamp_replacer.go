@@ -1,4 +1,4 @@
-package main
+package timeconverter
 
 import (
 	"regexp"
@@ -19,7 +19,7 @@ func (replacer UnixTimestampReplacer) ReplaceDates(input string, format string, 
 			panic(err)
 		}
 		t := time.Unix(i, 0)
-		if format == unixSeconds {
+		if format == UnixSeconds {
 			return strconv.FormatInt(t.Unix(), 10)
 		}
 		return t.In(location).Format(format)

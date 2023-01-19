@@ -1,4 +1,4 @@
-package main
+package timeconverter
 
 import (
 	"regexp"
@@ -131,7 +131,7 @@ func (replacer Iso8601Replacer) ReplaceDates(input string, format string, locati
 		if err != nil {
 			panic(err.Error())
 		}
-		if format == unixSeconds {
+		if format == UnixSeconds {
 			return strconv.FormatInt(t.Unix(), 10)
 		}
 		return t.In(location).Format(format)
