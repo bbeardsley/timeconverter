@@ -67,8 +67,8 @@ $ timeconverter -type=unix 1553534903
 
 ### bash aliases
 ```
-  alias lt='timeconverter'
-  alias cst='timeconverter -location="America/Chicago"'
+  alias lt='timeconverter now'
+  alias cst='timeconverter -location="America/Chicago" now'
   alias uts='timeconverter -type=unix'
 ```
 

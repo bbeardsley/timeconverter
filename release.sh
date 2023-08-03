@@ -2,7 +2,7 @@
 
 set -e
 
-version="0.3.5"
+version="0.3.6"
 package="timeconverter"
 bin="timeconverter"
 repo="https://github.com/bbeardsley/timeconverter"
@@ -33,7 +33,7 @@ do
 
   echo "Building for GOOS=$GOOS GOARCH=$GOARCH"
 
-  env GOOS=$GOOS GOARCH=$GOARCH go build -o dist/${BIN} cmd/timeconverter/main.go  &&
+  env GOOS=$GOOS GOARCH=$GOARCH go build -o dist/${BIN} main.go formats.go iso8601_replacer.go unix_timestamp_replacer.go &&
   zip -q dist/${ZIP} -j dist/${BIN} &&
   rm dist/${BIN}
 done

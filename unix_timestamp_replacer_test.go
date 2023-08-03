@@ -1,4 +1,4 @@
-package timeconverter
+package main
 
 import (
 	"testing"

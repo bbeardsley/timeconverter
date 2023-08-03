@@ -1,4 +1,4 @@
-package timeconverter
+package main
 
 import "time"
 
@@ -23,5 +23,8 @@ var TimeFormats = map[string]string{
 	"StampMilli":  time.StampMilli,
 	"StampMicro":  time.StampMicro,
 	"StampNano":   time.StampNano,
+	"DateTime":    time.DateTime,
+	"DateOnly":    time.DateOnly,
+	"TimeOnly":    time.TimeOnly,
 	UnixSeconds:   UnixSeconds,
 }
