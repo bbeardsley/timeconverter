@@ -36,6 +36,14 @@ func getBuiltInFormatKeys() []string {
 	return keys
 }
 
+func getLocationAliasKeys() []string {
+	keys := make([]string, 0)
+	for key := range LocationAliases {
+		keys = append(keys, key)
+	}
+	return keys
+}
+
 func getFormat(formatString string) string {
 	builtInFormat, ok := TimeFormats[formatString]
 	if ok {
@@ -45,17 +53,27 @@ func getFormat(formatString string) string {
 }
 
 func getLocation(locationString string) *time.Location {
-	location, err := time.LoadLocation(locationString)
-	if err == nil {
-		return location
+	locationFromAlias, ok := LocationAliases[locationString]
+	if ok {
+		location, err := time.LoadLocation(locationFromAlias)
+
+		if err == nil {
+			return location
+		}
+		panic(err.Error())
+	} else {
+		location, err := time.LoadLocation(locationString)
+		if err == nil {
+			return location
+		}
+		panic(err.Error())
 	}
-	panic(err.Error())
 }
 
 func main() {
 	builtinFormatKeys := getBuiltInFormatKeys()
 	sort.Strings(builtinFormatKeys)
-	locationPtr := flag.String("location", "Local", "tzdata location to convert to")
+	locationPtr := flag.String("location", "Local", "tzdata location to convert to (aliases \""+strings.Join(getLocationAliasKeys(), "\", \"")+"\")")
 	formatPtr := flag.String("format", "Mon 2006 Jan 02 03:04pm MST", "format to use (options \""+strings.Join(builtinFormatKeys, "\", \"")+"\"")
 	versionPtr := flag.Bool("version", false, "print version number and exit")
 	typePtr := flag.String("type", "iso8601", "what type of timestamps in the input (options \"iso8601\", \"unix\")")

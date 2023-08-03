@@ -33,8 +33,8 @@ do
 
   echo "Building for GOOS=$GOOS GOARCH=$GOARCH"
 
-  env GOOS=$GOOS GOARCH=$GOARCH go build -o dist/${BIN} main.go formats.go iso8601_replacer.go unix_timestamp_replacer.go &&
-  zip -q dist/${ZIP} -j dist/${BIN} &&
+  env GOOS=$GOOS GOARCH=$GOARCH go build -o dist/${BIN} && \
+  zip -q dist/${ZIP} -j dist/${BIN} && \
   rm dist/${BIN}
 done
 
