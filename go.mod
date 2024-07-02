@@ -1,3 +1,3 @@
 module github.com/bbeardsley/timeconverter
 
-go 1.21
+go 1.22
